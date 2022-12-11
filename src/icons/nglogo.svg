@@ -1,0 +1,8 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+     viewBox="0 0 640 640" style="enable-background:new 0 0 640 640;" xml:space="preserve">
+    <path d="M1328,581" fill="#3C3C3C"/>
+    <path d="M464,32l72,72H177" fill="#464646"/>
+    <path d="M104,32v360l72-72l1-216" fill="#505050"/>
+    <path d="M464,32v504l72-72V104" fill="#323232"/>
+    <path d="M104,536l288,72l72-72l-288-72" fill="#464646"/>
+</svg>
