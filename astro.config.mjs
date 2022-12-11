@@ -7,7 +7,7 @@ import mdx from "@astrojs/mdx";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://astro-moon-landing.netlify.app/",
+  site: "https://ngchain.org",
   integrations: [tailwind(), image({
     serviceEntryPoint: "@astrojs/image/sharp"
   }), mdx()],
