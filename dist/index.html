@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>ngchain — designed by subtraction</title>
-<meta name="description" content="ngchain: a proof-of-work chain whose entire state is two entities and whose grammar is six operations. WebAssembly contracts, a post-quantum signature menu, frontier design bounded by usability.">
-<meta property="og:title" content="ngchain — designed by subtraction">
-<meta property="og:description" content="Two entities. Six operations. A proof-of-work chain designed by subtraction.">
+<title>ngchain — the next-generation blockchain</title>
+<meta name="description" content="ngchain — a radically new, next-generation proof-of-work blockchain: auditable, scalable, security-oriented, post-quantum. A whole chain in two entities and six operations, with a WebAssembly VM that runs any language.">
+<meta property="og:title" content="ngchain — the next-generation blockchain">
+<meta property="og:description" content="A radically new, next-generation proof-of-work blockchain. Auditable, scalable, security-oriented, post-quantum — designed by subtraction.">
 <meta property="og:image" content="https://ngchain.org/social.jpg">
 <meta property="og:url" content="https://ngchain.org">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -108,6 +108,14 @@ section{position:relative;padding:clamp(80px,12vh,180px) var(--pad)}
 .hero h1 .thin{font-weight:300}
 .hero .sub{margin-top:clamp(24px,4vw,48px);max-width:52ch;font-size:clamp(16px,1.5vw,21px);color:var(--mute);font-weight:400;line-height:1.5}
 .hero .sub b{color:var(--ink);font-weight:500}
+.hero .kicker{margin-top:20px;font-family:var(--f-mono);font-size:clamp(12px,1.15vw,14px);letter-spacing:.05em;color:var(--mute)}
+.cta-row{display:flex;gap:14px;flex-wrap:wrap;margin-top:clamp(28px,4vw,46px)}
+.cta{display:inline-flex;align-items:center;gap:10px;font-family:var(--f-mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;padding:15px 26px;border:1px solid var(--ink);background:var(--ink);color:var(--paper);transition:background .4s var(--ease),color .4s,border-color .4s}
+.cta span{transition:transform .4s var(--ease)}
+.cta:hover{background:var(--accent);border-color:var(--accent);color:var(--paper)}
+.cta:hover span{transform:translate(3px,-3px)}
+.cta.ghost{background:transparent;color:var(--ink)}
+.cta.ghost:hover{background:var(--ink);color:var(--paper)}
 .scroll-hint{position:absolute;bottom:26px;left:var(--pad);z-index:2;font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--mute);display:flex;gap:10px;align-items:center}
 .scroll-hint .bar{width:46px;height:1px;background:var(--ink);position:relative;overflow:hidden}
 .scroll-hint .bar::after{content:"";position:absolute;inset:0;background:var(--accent);transform:translateX(-100%);animation:sweep 2.4s var(--ease) infinite}
@@ -260,17 +268,23 @@ footer{padding:clamp(60px,10vh,140px) var(--pad) 40px;border-top:1px solid var(-
   <canvas id="field" aria-hidden="true"></canvas>
   <div class="hero-inner">
     <div class="eyebrow" data-rise><span class="no">01 —</span> proof-of-work · webassembly · post-quantum</div>
-    <h1 style="margin-top:28px">
-      <span class="mask"><span>designed</span></span>
-      <span class="mask"><span class="thin">by <em>subtraction</em></span></span>
+    <h1 style="margin-top:24px">
+      <span class="mask"><span class="thin">next-generation</span></span>
+      <span class="mask"><span>block<em>chain</em>.</span></span>
     </h1>
+    <div class="kicker" data-rise>a radically new proof-of-work engine — designed by subtraction</div>
     <p class="sub" data-rise>
-      <b>ngchain</b> is a proof-of-work chain whose entire <b>state</b> is
-      <b>two entities</b> and whose entire <b>grammar</b> is <b>six
-      operations</b>. Nothing is registered — any key spends directly.
-      Contracts are WebAssembly, committed whole like a git blob. The
-      frontier is the goal; usability is the constraint that shapes it.
+      <b>ngchain</b> rebuilds the chain from first principles — <b>auditable</b>,
+      <b>scalable</b>, <b>security-oriented</b>, <b>post-quantum</b>. A whole
+      blockchain reduced to <b>two entities</b> and <b>six operations</b>, with a
+      <b>WebAssembly</b> VM that runs any language and exact 256-bit money at
+      native speed. Nothing is registered; any key spends directly. The frontier
+      of chain design, made usable.
     </p>
+    <div class="cta-row" data-rise>
+      <a class="cta" href="https://github.com/ngchain/ngcore" target="_blank" rel="noopener" data-hov>View on GitHub <span>↗</span></a>
+      <a class="cta ghost" href="https://github.com/ngchain/ngcore/tree/dev/docs" target="_blank" rel="noopener" data-hov>Read the docs <span>↗</span></a>
+    </div>
   </div>
   <div class="scroll-hint"><span class="bar"></span> scroll</div>
 </section>
@@ -278,16 +292,16 @@ footer{padding:clamp(60px,10vh,140px) var(--pad) 40px;border-top:1px solid var(-
 <!-- MARQUEE -->
 <div class="marq" aria-hidden="true">
   <div class="track">
-    <span>◇</span> two entities · six operations <b>—</b> an address is identity, balance &amp; namespace
-    <span>◇</span> contracts are wasm <b>—</b> any language that targets it
-    <span>◇</span> fees are burned <span>◇</span> 4-second blocks · GHOST uncles
-    <span>◇</span> a post-quantum signature menu <b>—</b> not a monoculture
-    <span>◇</span> exact U256 money as a host module &nbsp;&nbsp;
-    <span>◇</span> two entities · six operations <b>—</b> an address is identity, balance &amp; namespace
-    <span>◇</span> contracts are wasm <b>—</b> any language that targets it
-    <span>◇</span> fees are burned <span>◇</span> 4-second blocks · GHOST uncles
-    <span>◇</span> a post-quantum signature menu <b>—</b> not a monoculture
-    <span>◇</span> exact U256 money as a host module &nbsp;&nbsp;
+    <span>◇</span> next-generation blockchain <b>—</b> radically new
+    <span>◇</span> auditable · scalable · security-oriented
+    <span>◇</span> two entities · six operations <span>◇</span> webassembly, any language
+    <span>◇</span> post-quantum by default <span>◇</span> 4-second blocks · GHOST uncles
+    <span>◇</span> exact 256-bit money at native speed <b>—</b> designed by subtraction &nbsp;&nbsp;
+    <span>◇</span> next-generation blockchain <b>—</b> radically new
+    <span>◇</span> auditable · scalable · security-oriented
+    <span>◇</span> two entities · six operations <span>◇</span> webassembly, any language
+    <span>◇</span> post-quantum by default <span>◇</span> 4-second blocks · GHOST uncles
+    <span>◇</span> exact 256-bit money at native speed <b>—</b> designed by subtraction &nbsp;&nbsp;
   </div>
 </div>
 
@@ -310,7 +324,7 @@ footer{padding:clamp(60px,10vh,140px) var(--pad) 40px;border-top:1px solid var(-
 <section id="model" class="rule">
   <div class="model-head">
     <div>
-      <div class="eyebrow" data-rise><span class="no">03 —</span> the formal model</div>
+      <div class="eyebrow" data-rise><span class="no">03 —</span> the entire chain, formally</div>
       <h2 data-rise style="margin-top:22px">Two&nbsp;entities.<br>Six&nbsp;operations.</h2>
     </div>
     <div class="eyebrow" data-rise style="max-width:30ch;text-align:right;display:block;color:var(--mute)">
@@ -364,7 +378,7 @@ footer{padding:clamp(60px,10vh,140px) var(--pad) 40px;border-top:1px solid var(-
 <!-- PRINCIPLES -->
 <section id="design" class="principles rule">
   <div class="eyebrow" data-rise style="margin-bottom:26px"><span class="no">05 —</span> the design rule</div>
-  <h2 data-rise>Frontier ambition, bounded by usability.</h2>
+  <h2 data-rise>The frontier of chain design — made usable.</h2>
   <div class="pgrid" data-rise>
     <div class="pcard" data-hov><div class="pn">/ 01</div><h3>WebAssembly, not a bespoke VM</h3><p>Any language that targets wasm produces a contract, with standard tooling and a decade-hardened sandbox. The frontier choice and the usable one at once.</p></div>
     <div class="pcard" data-hov><div class="pn">/ 02</div><h3>Determinism is the hard constraint</h3><p>Every validator must compute the same result — and the same gas — on every architecture. It is the filter every performance idea passes through.</p></div>
@@ -418,6 +432,7 @@ footer{padding:clamp(60px,10vh,140px) var(--pad) 40px;border-top:1px solid var(-
 <!-- FOOTER -->
 <footer id="foot">
   <div class="foot-big" data-rise>ng<em>·</em>chain</div>
+  <div class="kicker" data-rise style="margin-top:18px;font-family:var(--f-mono);font-size:13px;letter-spacing:.06em;color:var(--mute)">the next-generation blockchain — radically new, designed by subtraction</div>
   <div class="foot-grid">
     <div class="foot-links">
       <a href="https://github.com/ngchain/ngcore" target="_blank" rel="noopener" data-hov>GitHub</a>
