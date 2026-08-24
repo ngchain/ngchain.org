@@ -85,6 +85,18 @@ function ext(u) {
   return { target: "_blank", rel: "noopener" };
 }
 
+// The isometric ng block mark (from resources/NG.svg), retinted to the site
+// palette: facets are currentColor at tiered opacities so it inverts cleanly
+// on either theme; `accent` lights the tall facet vermilion.
+const Mark = ({ className, accent }) => (
+  <svg className={className} viewBox="88 16 464 608" fill="currentColor" aria-hidden="true">
+    <path fillOpacity=".72" d="M464,32l72,72H177" />
+    <path fillOpacity=".5" d="M104,32v360l72-72l1-216" />
+    <path {...(accent ? { style: { fill: "var(--accent)" } } : { fillOpacity: 1 })} d="M464,32v504l72-72V104" />
+    <path fillOpacity=".72" d="M104,536l288,72l72-72l-288-72" />
+  </svg>
+);
+
 export default function App() {
   useEffect(() => {
     const root = document.documentElement, body = document.body;
@@ -233,12 +245,13 @@ export default function App() {
       <div className="rail"><i /></div>
 
       <div className="pre">
+        <Mark className="pre-mark" accent />
         <div className="lbl">ngchain / loading</div>
         <div className="cnt">000</div>
       </div>
 
       <header>
-        <a className="brand" href="#top">ng<b>·</b>chain</a>
+        <a className="brand" href="#top"><Mark className="brand-mark" />ng<b>·</b>chain</a>
         <nav><ul>
           {NAV.map((x) => (
             <li key={x.label} className={x.ext ? "" : "nav-scroll"}><a href={x.href} data-hov {...(x.ext ? ext() : {})}>{x.label}</a></li>
@@ -423,6 +436,7 @@ export default function App() {
 
       {/* FOOTER */}
       <footer id="foot">
+        <Mark className="foot-mark" accent />
         <div className="foot-big" data-rise>ng<em>·</em>chain</div>
         <div className="kicker" data-rise style={{ marginTop: "18px", fontFamily: "var(--f-mono)", fontSize: "13px", letterSpacing: ".06em", color: "var(--mute)" }}>the next-generation blockchain — radically new, designed by subtraction</div>
         <div className="foot-grid">
