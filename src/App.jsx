@@ -241,7 +241,7 @@ export default function App() {
         <a className="brand" href="#top">ng<b>·</b>chain</a>
         <nav><ul>
           {NAV.map((x) => (
-            <li key={x.label}><a href={x.href} data-hov {...(x.ext ? ext() : {})}>{x.label}</a></li>
+            <li key={x.label} className={x.ext ? "" : "nav-scroll"}><a href={x.href} data-hov {...(x.ext ? ext() : {})}>{x.label}</a></li>
           ))}
         </ul></nav>
       </header>
