@@ -86,16 +86,27 @@ section{position:relative;padding:clamp(80px,12vh,180px) var(--pad)}
 .mask.in>span{transform:none}
 
 /* HERO */
-.hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding-top:120px}
+.hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding-top:clamp(88px,11vh,120px);padding-bottom:clamp(64px,9vh,110px)}
 #field{position:absolute;inset:0;z-index:0;opacity:.9}
 .hero-inner{position:relative;z-index:2}
-.hero h1{font-weight:300;letter-spacing:-.045em;line-height:.86;
-  font-size:clamp(52px,13.5vw,220px)}
+/* headline scales with the viewport but stays short enough that the whole
+   hero (kicker→CTAs) fits a laptop screen; 9vw keeps "next-generation" on
+   one line down to ~1000px so it never fragments into three ragged lines */
+.hero h1{font-weight:300;letter-spacing:-.045em;line-height:.88;
+  font-size:clamp(44px,9vw,190px)}
 .hero h1 em{font-style:normal;color:var(--accent)}
 .hero h1 .thin{font-weight:300}
 .hero .sub{margin-top:clamp(24px,4vw,48px);max-width:52ch;font-size:clamp(16px,1.5vw,21px);color:var(--mute);font-weight:400;line-height:1.5}
 .hero .sub b{color:var(--ink);font-weight:500}
 .hero .kicker{margin-top:20px;font-family:var(--f-mono);font-size:clamp(12px,1.15vw,14px);letter-spacing:.05em;color:var(--mute)}
+/* short laptop screens (e.g. a non-maximized window): tighten the hero so
+   the CTAs never fall below the fold */
+@media(max-height:780px){
+  .hero{padding-top:74px;padding-bottom:44px}
+  .hero h1{font-size:clamp(44px,8vw,150px)}
+  .hero .sub{margin-top:18px}
+  .hero .cta-row{margin-top:24px}
+}
 .cta-row{display:flex;gap:14px;flex-wrap:wrap;margin-top:clamp(28px,4vw,46px)}
 .cta{display:inline-flex;align-items:center;gap:10px;font-family:var(--f-mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;padding:15px 26px;border:1px solid var(--ink);background:var(--ink);color:var(--paper);transition:background .4s var(--ease),color .4s,border-color .4s}
 .cta span{transition:transform .4s var(--ease)}
