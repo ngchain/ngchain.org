@@ -1,25 +1,30 @@
 :root{
-  --paper:#e7e4dd; --ink:#0d0d0c; --mute:#8b8880; --line:#c6c2b8;
-  --accent:#ff3a1d; --panel:#eae8e1;
-  /* forged-metal type gradient + brushed-steel panel face/bevel */
-  --metal:linear-gradient(176deg,#39352d 0%,#0f0e0c 20%,#4a453b 46%,#100f0c 64%,#5f574a 86%,#161410 100%);
-  --steel-face:linear-gradient(180deg,#efede7 0%,#e4e1d9 54%,#ddd9d0 100%);
-  --steel-hi:rgba(255,255,255,.7); --steel-sh:rgba(28,24,16,.10);
+  /* INDUSTRIAL STEEL palette — cool brushed metal, gunmetal ink, hazard red */
+  --paper:#c5c9ce; --ink:#171a1e; --mute:#565c64; --line:#9aa1a8;
+  --accent:#ff3a1d; --panel:#d3d7db;
+  /* machined-plate face, brushed-line texture, chrome-type gradient, bevel */
+  --plate:linear-gradient(180deg,#dee2e6 0%,#d0d4d8 48%,#c1c5ca 100%);
+  --brushed:repeating-linear-gradient(90deg,rgba(255,255,255,.05) 0 1px,rgba(10,14,18,.045) 1px 2px,rgba(255,255,255,0) 2px 4px);
+  --metal:linear-gradient(176deg,#2b2f35 0%,#0f1216 22%,#3c434b 44%,#0d1014 60%,#495159 80%,#141821 100%);
+  --steel-hi:rgba(255,255,255,.85); --steel-sh:rgba(12,16,20,.34); --rivet:#3a4048;
   --f-disp:"Space Grotesk",system-ui,sans-serif;
   --f-mono:"Space Mono",ui-monospace,monospace;
   --pad:clamp(20px,5vw,80px);
   --ease:cubic-bezier(.16,1,.3,1);
 }
 [data-theme="dark"]{
-  --paper:#0c0c0b; --ink:#e9e7df; --mute:#6f6d64; --line:#26251f; --panel:#151410;
-  --metal:linear-gradient(176deg,#8f8b81 0%,#f4f2ec 20%,#a39e93 46%,#eae8e0 64%,#7c776c 86%,#dedcd4 100%);
-  --steel-face:linear-gradient(180deg,#16150e 0%,#121108 54%,#0e0d07 100%);
-  --steel-hi:rgba(255,255,255,.08); --steel-sh:rgba(0,0,0,.5);
+  /* GUNMETAL — dark machined steel with chrome type */
+  --paper:#141719; --ink:#dfe4e8; --mute:#787f87; --line:#2d3238; --panel:#1b1f23;
+  --plate:linear-gradient(180deg,#242a30 0%,#1b2025 48%,#14181c 100%);
+  --brushed:repeating-linear-gradient(90deg,rgba(255,255,255,.035) 0 1px,rgba(0,0,0,.06) 1px 2px,rgba(255,255,255,0) 2px 4px);
+  --metal:linear-gradient(176deg,#9aa0a8 0%,#f3f6f8 22%,#a7aeb6 44%,#e6eaed 60%,#848b93 80%,#d5dade 100%);
+  --steel-hi:rgba(255,255,255,.11); --steel-sh:rgba(0,0,0,.6); --rivet:#0b0e11;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
 body{
-  background:var(--paper);color:var(--ink);font-family:var(--f-disp);
+  background-color:var(--paper);background-image:var(--brushed);background-attachment:fixed;
+  color:var(--ink);font-family:var(--f-disp);
   font-weight:400;line-height:1.25;overflow-x:hidden;
   transition:background .6s var(--ease),color .6s var(--ease);
   cursor:none;
@@ -60,7 +65,9 @@ body.hovering .cur-ring{width:64px;height:64px;border-color:var(--accent)}
 
 /* nav */
 header{position:fixed;top:0;left:0;right:0;z-index:900;display:flex;align-items:center;
-  justify-content:space-between;padding:22px var(--pad);mix-blend-mode:difference;color:#fff}
+  justify-content:space-between;padding:15px var(--pad);color:var(--ink);
+  background-color:var(--panel);background-image:var(--brushed);
+  box-shadow:inset 0 1px 0 var(--steel-hi),inset 0 -2px 3px var(--steel-sh),inset 0 -1px 0 var(--line),0 2px 10px rgba(0,0,0,.16)}
 .brand{font-weight:700;letter-spacing:-.02em;font-size:18px;display:flex;gap:.6ch;align-items:center}
 .brand b{color:var(--accent)}
 .brand-mark{height:1.22em;width:auto;flex:none;margin-top:-.04em}
@@ -256,31 +263,44 @@ footer{padding:clamp(60px,10vh,140px) var(--pad) 40px;border-top:1px solid var(-
 @media(max-width:900px){.model-note{text-align:left;margin-left:0;max-width:100%}.eco-head>.eyebrow{text-align:left!important;max-width:100%!important}.model-head>.eyebrow{text-align:left!important}}
 .mag{display:inline-block;will-change:transform}
 
-/* ============ STEEL / METALLIC LAYER ============ */
-/* forged-metal display type — hero words + every section heading */
-.metal,section h2,.model-head h2,.sig h2,.principles h2,.start h2,.eco-head h2{
+/* ============ INDUSTRIAL METAL LAYER ============ */
+/* chrome / dark-steel display type — hero words, section headings, wordmark */
+.metal,section h2,.foot-big{
   background:var(--metal);-webkit-background-clip:text;background-clip:text;
   -webkit-text-fill-color:transparent;color:transparent;
 }
-.hero h1 .metal{filter:drop-shadow(0 1px 0 rgba(0,0,0,.14))}
-[data-theme="dark"] .hero h1 .metal{filter:drop-shadow(0 1px 0 rgba(0,0,0,.5))}
-.hero h1 em{-webkit-text-fill-color:var(--accent)} /* keep 'chain' vermilion */
+section h2{filter:drop-shadow(0 1px 0 var(--steel-hi))}
+.hero h1 .metal{filter:drop-shadow(0 2px 1px rgba(8,12,16,.4)) drop-shadow(0 -1px 0 var(--steel-hi))}
+.hero h1 em,.foot-big em{-webkit-text-fill-color:var(--accent)} /* keep vermilion */
 
-/* brushed-steel panel faces with a bevelled top-light / bottom-shadow */
-.noun,.verb,.pcard,.spec,.srow,.eco{
-  background:var(--steel-face);
-  box-shadow:inset 0 1px 0 var(--steel-hi),inset 0 -1px 0 var(--steel-sh);
+/* machined-steel plates: brushed face, bright top edge, recessed bottom */
+.noun,.verb,.pcard,.spec,.srow,.eco,.term,.marq{
+  background-color:transparent;background-image:var(--brushed),var(--plate);
+  box-shadow:inset 0 1px 0 var(--steel-hi),inset 0 -2px 4px var(--steel-sh),inset 0 0 0 1px rgba(255,255,255,.05);
 }
-.term{background:var(--steel-face);box-shadow:inset 0 1px 0 var(--steel-hi),inset 0 -1px 0 var(--steel-sh),0 1px 3px rgba(0,0,0,.12)}
-.marq{background:var(--steel-face);box-shadow:inset 0 1px 0 var(--steel-hi),inset 0 -1px 0 var(--steel-sh)}
+/* keep the metal on hover instead of flattening to a solid slab */
+.noun:hover,.pcard:hover,.srow:hover{background-image:var(--brushed),linear-gradient(180deg,#eaeef2 0%,#dadee2 100%)}
+.verb:hover,.eco:hover{background-color:transparent;background-image:var(--brushed),linear-gradient(180deg,#2c333b 0%,#12171c 100%);color:#eef2f5}
+[data-theme="dark"] .verb:hover,[data-theme="dark"] .eco:hover{background-image:var(--brushed),linear-gradient(180deg,#ff5a3d,#ff3a1d);color:#0c0c0b}
 
-/* metallic primary button — polished bevel, not a flat slab */
+/* the terminal is a bolted control panel — rivets in the four corners */
+.term{box-shadow:inset 0 1px 0 var(--steel-hi),inset 0 -2px 5px var(--steel-sh),0 3px 14px rgba(0,0,0,.22);position:relative}
+.term::after,.specs::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:4;
+  background:
+    radial-gradient(circle at 13px 13px,var(--rivet) 0 2px,transparent 2.7px),
+    radial-gradient(circle at calc(100% - 13px) 13px,var(--rivet) 0 2px,transparent 2.7px),
+    radial-gradient(circle at 13px calc(100% - 13px),var(--rivet) 0 2px,transparent 2.7px),
+    radial-gradient(circle at calc(100% - 13px) calc(100% - 13px),var(--rivet) 0 2px,transparent 2.7px);}
+.specs{position:relative}
+
+/* machined metal primary button + beveled ghost */
 .cta:not(.ghost){
-  background:linear-gradient(180deg,#28251f 0%,#0d0d0c 100%);
-  border-color:#000;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.16),inset 0 -1px 0 rgba(0,0,0,.4),0 2px 8px rgba(0,0,0,.22);
+  background:linear-gradient(180deg,#3b424a 0%,#20262c 46%,#12161a 100%);
+  border:1px solid #0a0d10;color:#eef2f5;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 0 -2px 3px rgba(0,0,0,.55),0 2px 7px rgba(0,0,0,.32);
 }
-.cta:not(.ghost):hover{background:linear-gradient(180deg,#ff5637 0%,var(--accent) 100%)}
+.cta:not(.ghost):hover{background:linear-gradient(180deg,#ff5a3d 0%,#ff3a1d 100%);border-color:#8f1c0c;color:#fff}
+.cta.ghost{box-shadow:inset 0 1px 0 var(--steel-hi),inset 0 -2px 3px var(--steel-sh)}
 
 /* the design-section lead that hands detail off to the yellow paper */
 .principles .lead{margin-top:26px;max-width:60ch;color:var(--mute);font-size:16px;line-height:1.62}

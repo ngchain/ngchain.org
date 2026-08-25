@@ -11,13 +11,13 @@ const NAV = [
 
 const NOUNS = [
   { i: "ENTITY / 01", h: "Address", p: "The 32-byte keccak hash of a public key. Identity, the balance holder, and a namespace — all at once.", tags: ["identity", "balance", "namespace"] },
-  { i: "ENTITY / 02", h: "Contract", p: "A compiled WebAssembly module an address opens under its own namespace — committed whole like a git blob, frozen and executed while active.", tags: ["wasm", "git-blob commit", "sandboxed"] },
+  { i: "ENTITY / 02", h: "Contract", p: "A compiled WebAssembly module an address opens under its own namespace — versioned entirely on-chain, each revision recorded as the minimal change from the last. Frozen and executed while active.", tags: ["webassembly", "on-chain versioning", "sandboxed"] },
 ];
 
 const VERBS = [
   { no: "OP / 01", h: "Generate", p: <>The mining reward — the only tx that mints.</> },
   { no: "OP / 02", h: "Transact", p: <>Pay an address; run its active contract. The call routes to the export named in the payload — <b>main</b> is the fallback.</> },
-  { no: "OP / 03", h: "Commit", p: <>Replace the own contract module (a deflate snapshot). The first commit opens the slot.</> },
+  { no: "OP / 03", h: "Commit", p: <>Publish a new revision of your module; the chain writes only the minimal change from the live binary. The first revision brings the contract online.</> },
   { no: "OP / 04", h: "Activate", p: <>Validate and freeze the module, turn the VM on — runs <b>init</b> once.</> },
   { no: "OP / 05", h: "Deactivate", p: <>Turn the VM off, reopen the module for commits.</> },
   { no: "OP / 06", h: "Destroy", p: <>Remove the own slot entirely.</> },
@@ -451,8 +451,9 @@ export default function App() {
           <div className="eyebrow" data-rise><span className="no">06 —</span> quick start</div>
           <h2 data-rise style={{ marginTop: "22px" }}>Build it.<br />Spend directly.</h2>
           <p className="lead" data-rise>
-            Keys stay local; only signed txs travel. A throwaway local chain is
-            one flag away. Fork a running chain for contract debugging, anvil-style.
+            Keys stay local; only signed transactions travel. A disposable local
+            chain is one flag away, and any running chain can be forked for
+            contract debugging.
           </p>
         </div>
         <div className="term" data-rise>
