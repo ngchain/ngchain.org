@@ -1,13 +1,20 @@
 :root{
-  --paper:#e7e4dd; --ink:#0d0d0c; --mute:#8b8880; --line:#cbc7bd;
-  --accent:#ff3a1d; --panel:#ecebe5;
+  --paper:#e7e4dd; --ink:#0d0d0c; --mute:#8b8880; --line:#c6c2b8;
+  --accent:#ff3a1d; --panel:#eae8e1;
+  /* forged-metal type gradient + brushed-steel panel face/bevel */
+  --metal:linear-gradient(176deg,#39352d 0%,#0f0e0c 20%,#4a453b 46%,#100f0c 64%,#5f574a 86%,#161410 100%);
+  --steel-face:linear-gradient(180deg,#efede7 0%,#e4e1d9 54%,#ddd9d0 100%);
+  --steel-hi:rgba(255,255,255,.7); --steel-sh:rgba(28,24,16,.10);
   --f-disp:"Space Grotesk",system-ui,sans-serif;
   --f-mono:"Space Mono",ui-monospace,monospace;
   --pad:clamp(20px,5vw,80px);
   --ease:cubic-bezier(.16,1,.3,1);
 }
 [data-theme="dark"]{
-  --paper:#0c0c0b; --ink:#e9e7df; --mute:#6f6d64; --line:#26251f; --panel:#131311;
+  --paper:#0c0c0b; --ink:#e9e7df; --mute:#6f6d64; --line:#26251f; --panel:#151410;
+  --metal:linear-gradient(176deg,#8f8b81 0%,#f4f2ec 20%,#a39e93 46%,#eae8e0 64%,#7c776c 86%,#dedcd4 100%);
+  --steel-face:linear-gradient(180deg,#16150e 0%,#121108 54%,#0e0d07 100%);
+  --steel-hi:rgba(255,255,255,.08); --steel-sh:rgba(0,0,0,.5);
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
@@ -248,3 +255,32 @@ footer{padding:clamp(60px,10vh,140px) var(--pad) 40px;border-top:1px solid var(-
 .eco:hover .arr{transform:translate(3px,-3px)}
 @media(max-width:900px){.model-note{text-align:left;margin-left:0;max-width:100%}.eco-head>.eyebrow{text-align:left!important;max-width:100%!important}.model-head>.eyebrow{text-align:left!important}}
 .mag{display:inline-block;will-change:transform}
+
+/* ============ STEEL / METALLIC LAYER ============ */
+/* forged-metal display type — hero words + every section heading */
+.metal,section h2,.model-head h2,.sig h2,.principles h2,.start h2,.eco-head h2{
+  background:var(--metal);-webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;
+}
+.hero h1 .metal{filter:drop-shadow(0 1px 0 rgba(0,0,0,.14))}
+[data-theme="dark"] .hero h1 .metal{filter:drop-shadow(0 1px 0 rgba(0,0,0,.5))}
+.hero h1 em{-webkit-text-fill-color:var(--accent)} /* keep 'chain' vermilion */
+
+/* brushed-steel panel faces with a bevelled top-light / bottom-shadow */
+.noun,.verb,.pcard,.spec,.srow,.eco{
+  background:var(--steel-face);
+  box-shadow:inset 0 1px 0 var(--steel-hi),inset 0 -1px 0 var(--steel-sh);
+}
+.term{background:var(--steel-face);box-shadow:inset 0 1px 0 var(--steel-hi),inset 0 -1px 0 var(--steel-sh),0 1px 3px rgba(0,0,0,.12)}
+.marq{background:var(--steel-face);box-shadow:inset 0 1px 0 var(--steel-hi),inset 0 -1px 0 var(--steel-sh)}
+
+/* metallic primary button — polished bevel, not a flat slab */
+.cta:not(.ghost){
+  background:linear-gradient(180deg,#28251f 0%,#0d0d0c 100%);
+  border-color:#000;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.16),inset 0 -1px 0 rgba(0,0,0,.4),0 2px 8px rgba(0,0,0,.22);
+}
+.cta:not(.ghost):hover{background:linear-gradient(180deg,#ff5637 0%,var(--accent) 100%)}
+
+/* the design-section lead that hands detail off to the yellow paper */
+.principles .lead{margin-top:26px;max-width:60ch;color:var(--mute);font-size:16px;line-height:1.62}

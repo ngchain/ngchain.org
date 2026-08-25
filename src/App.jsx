@@ -51,7 +51,7 @@ const ECO = [
   { n: "/ 05", h: <>RPC &amp; API</>, sd: "rpc.ngchain.org" },
   { n: "/ 06", h: "Docs", sd: "docs.ngchain.org" },
   { n: "/ 07", h: "Network status", sd: "status.ngchain.org" },
-  { n: "/ 08", h: "Whitepaper", sd: "paper.ngchain.org" },
+  { n: "/ 08", h: "Yellow paper", sd: "yellowpaper.ngchain.org" },
 ];
 
 const FOOTER_LINKS = [
@@ -63,6 +63,7 @@ const FOOTER_LINKS = [
   ["Docs", "https://docs.ngchain.org"],
   ["Status", "https://status.ngchain.org"],
   ["Playground", "https://try.ngchain.org"],
+  ["Yellow paper", "https://yellowpaper.ngchain.org"],
   ["GitHub", "https://github.com/ngchain"],
 ];
 
@@ -198,33 +199,76 @@ export default function App() {
       navigator.clipboard.writeText(text).then(() => { const o = copy.textContent; copy.textContent = "copied ✓"; setTimeout(() => { copy.textContent = o; }, 1400); });
     });
 
-    // hero canvas: a field that thins out (subtraction)
+    // hero canvas: a dynamic metallic particle field — drifting steel nodes
+    // wired into a live constellation. Nodes gravitate to the pointer, the
+    // links there charge vermilion, and each node carries a specular glint so
+    // the whole field reads like brushed, moving metal.
     const cv = document.getElementById("field"), ctx = cv.getContext("2d");
-    let pts = [], W, H, raf2, mxx = -999, myy = -999;
+    let ps = [], W, H, raf2, mxx = -9999, myy = -9999, tms = 0;
     const DPR = Math.min(devicePixelRatio || 1, 2);
     const css = getComputedStyle(root);
     const build = () => {
-      pts = []; const gap = 46 * DPR;
-      for (let y = gap; y < H; y += gap) for (let x = gap; x < W; x += gap) {
-        pts.push({ x: x + (Math.random() - .5) * 10 * DPR, y: y + (Math.random() - .5) * 10 * DPR, keep: Math.random() < .34, a: 0 });
-      }
+      const n = Math.max(46, Math.min(150, Math.round((W * H) / (DPR * DPR) / 13000)));
+      ps = [];
+      for (let i = 0; i < n; i++) ps.push({
+        x: Math.random() * W, y: Math.random() * H,
+        vx: (Math.random() - .5) * .22 * DPR, vy: (Math.random() - .5) * .22 * DPR,
+        r: (Math.random() * 1.3 + .7) * DPR, ph: Math.random() * 6.283,
+      });
     };
-    const resize = () => { W = cv.width = innerWidth * DPR; H = cv.height = cv.parentElement.offsetHeight * DPR; cv.style.width = innerWidth + "px"; cv.style.height = cv.parentElement.offsetHeight + "px"; build(); };
+    const resize = () => {
+      W = cv.width = innerWidth * DPR; H = cv.height = cv.parentElement.offsetHeight * DPR;
+      cv.style.width = innerWidth + "px"; cv.style.height = cv.parentElement.offsetHeight + "px"; build();
+    };
     on(window, "mousemove", (e) => { mxx = e.clientX * DPR; myy = e.clientY * DPR; });
+    on(window, "mouseout", () => { mxx = -9999; myy = -9999; });
     const draw = () => {
+      tms += 1;
       ctx.clearRect(0, 0, W, H);
-      const ink = css.getPropertyValue("--ink").trim(), acc = css.getPropertyValue("--accent").trim();
-      for (let i = 0; i < pts.length; i++) {
-        const p = pts[i];
-        if (p.keep && p.a < 1) p.a += .02;
-        const dx = p.x - mxx, dy = p.y - myy, d = Math.sqrt(dx * dx + dy * dy), R = 150 * DPR, near = d < R;
-        let ox = 0, oy = 0;
-        if (near) { const f = (1 - d / R); ox = dx / d * f * 22 * DPR; oy = dy / d * f * 22 * DPR; }
-        const r = (p.keep ? (near ? 2.6 : 1.7) : 1.1) * DPR;
-        const alpha = p.keep ? (.18 + p.a * .5) : (near ? (1 - d / R) * .5 : 0);
-        if (alpha <= 0) continue;
-        ctx.beginPath(); ctx.arc(p.x + ox, p.y + oy, r, 0, 6.283);
-        ctx.fillStyle = (near && d < 70 * DPR) ? acc : ink; ctx.globalAlpha = alpha; ctx.fill();
+      const ink = css.getPropertyValue("--ink").trim();
+      const acc = css.getPropertyValue("--accent").trim();
+      const hi = root.getAttribute("data-theme") === "dark" ? "#f4f2ec" : "#ffffff";
+      const LINK = 132 * DPR, MOUSE = 200 * DPR;
+      // integrate motion + gentle pointer gravitation
+      for (const p of ps) {
+        const dx = mxx - p.x, dy = myy - p.y, d2 = dx * dx + dy * dy;
+        if (d2 < MOUSE * MOUSE) { const d = Math.sqrt(d2) || 1, f = (1 - d / MOUSE) * .05 * DPR; p.vx += dx / d * f; p.vy += dy / d * f; }
+        p.x += p.vx; p.y += p.vy; p.vx *= .992; p.vy *= .992;
+        if (Math.abs(p.vx) < .05 * DPR) p.vx += (Math.random() - .5) * .05 * DPR;
+        if (Math.abs(p.vy) < .05 * DPR) p.vy += (Math.random() - .5) * .05 * DPR;
+        if (p.x < -30) p.x = W + 30; else if (p.x > W + 30) p.x = -30;
+        if (p.y < -30) p.y = H + 30; else if (p.y > H + 30) p.y = -30;
+      }
+      // wiring: node-to-node, then node-to-pointer (charged)
+      ctx.lineWidth = .6 * DPR;
+      for (let i = 0; i < ps.length; i++) {
+        const a = ps[i];
+        for (let j = i + 1; j < ps.length; j++) {
+          const b = ps[j], dx = a.x - b.x, dy = a.y - b.y, d2 = dx * dx + dy * dy;
+          if (d2 < LINK * LINK) {
+            const t = 1 - Math.sqrt(d2) / LINK;
+            ctx.strokeStyle = ink; ctx.globalAlpha = t * .16;
+            ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+          }
+        }
+        const mdx = a.x - mxx, mdy = a.y - myy, md2 = mdx * mdx + mdy * mdy;
+        if (md2 < MOUSE * MOUSE) {
+          const t = 1 - Math.sqrt(md2) / MOUSE;
+          ctx.strokeStyle = acc; ctx.globalAlpha = t * .5; ctx.lineWidth = .9 * DPR;
+          ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(mxx, myy); ctx.stroke();
+          ctx.lineWidth = .6 * DPR;
+        }
+      }
+      // metallic nodes: dark core + offset specular glint, shimmering
+      for (const p of ps) {
+        const md2 = (p.x - mxx) * (p.x - mxx) + (p.y - myy) * (p.y - myy);
+        const near = md2 < MOUSE * MOUSE;
+        const sh = .55 + .45 * Math.sin(tms * .03 + p.ph);
+        const rr = p.r * (near ? 1.7 : 1);
+        ctx.globalAlpha = near ? .95 : .62; ctx.fillStyle = near ? acc : ink;
+        ctx.beginPath(); ctx.arc(p.x, p.y, rr, 0, 6.283); ctx.fill();
+        ctx.globalAlpha = (near ? .85 : .5) * sh; ctx.fillStyle = hi;
+        ctx.beginPath(); ctx.arc(p.x - rr * .34, p.y - rr * .34, rr * .5, 0, 6.283); ctx.fill();
       }
       ctx.globalAlpha = 1; raf2 = requestAnimationFrame(draw);
     };
@@ -269,17 +313,17 @@ export default function App() {
         <div className="hero-inner">
           <div className="eyebrow" data-rise><span className="no">01 —</span> proof-of-work · webassembly · post-quantum</div>
           <h1 style={{ marginTop: "24px" }}>
-            <span className="mask"><span className="thin">next-generation</span></span>
-            <span className="mask"><span>block<em>chain</em>.</span></span>
+            <span className="mask"><span className="thin metal">next-generation</span></span>
+            <span className="mask"><span><span className="metal">block</span><em>chain</em><span className="metal">.</span></span></span>
           </h1>
-          <div className="kicker" data-rise>a radically new proof-of-work engine — designed by subtraction</div>
+          <div className="kicker" data-rise>a sovereign proof-of-work engine — forged down to its irreducible core</div>
           <p className="sub" data-rise>
-            <b>ngchain</b> rebuilds the chain from first principles — <b>auditable</b>,{" "}
-            <b>scalable</b>, <b>security-oriented</b>, <b>post-quantum</b>. A whole
-            blockchain reduced to <b>two entities</b> and <b>six operations</b>, with a{" "}
-            <b>WebAssembly</b> VM that runs any language and exact 256-bit money at
-            native speed. Nothing is registered; any key spends directly. The frontier
-            of chain design, made usable.
+            <b>ngchain</b> is a ground-up reconstruction of the proof-of-work chain —{" "}
+            <b>auditable</b>, <b>scalable</b>, <b>security-oriented</b>, <b>post-quantum</b>{" "}
+            from genesis. An entire settlement layer forged down to <b>two entities</b> and{" "}
+            <b>six operations</b>, on a <b>WebAssembly</b> core that runs any language and
+            settles exact 256-bit value at native speed. The formal design lands in the{" "}
+            <b>yellow paper</b>.
           </p>
           <div className="cta-row" data-rise>
             <a className="cta" href="https://github.com/ngchain/ngcore" {...ext()} data-hov>View on GitHub <span>↗</span></a>
@@ -294,11 +338,11 @@ export default function App() {
         <div className="track">
           {[0, 1].map((k) => (
             <React.Fragment key={k}>
-              <span>◇</span> next-generation blockchain <b>—</b> radically new
+              <span>◇</span> the next-generation blockchain <b>—</b> forged from first principles
               <span>◇</span> auditable · scalable · security-oriented
               <span>◇</span> two entities · six operations <span>◇</span> webassembly, any language
-              <span>◇</span> post-quantum by default <span>◇</span> 4-second blocks · GHOST uncles
-              <span>◇</span> exact 256-bit money at native speed <b>—</b> designed by subtraction {"  "}
+              <span>◇</span> post-quantum from genesis <span>◇</span> 4-second blocks · GHOST uncles
+              <span>◇</span> exact 256-bit money at native speed <span>◇</span> specified in the yellow paper {"  "}
             </React.Fragment>
           ))}
         </div>
@@ -313,9 +357,10 @@ export default function App() {
           itself. <span className="g">That is the entire state.</span>
         </p>
         <div className="note" data-rise>
-          Subtraction is the usability strategy. A smaller surface is easier to
-          reason about, harder to misuse, cheaper to keep deterministic across
-          every node. Every feature earns its place against this baseline.
+          Subtraction is the discipline. A smaller surface is easier to reason about,
+          harder to misuse, cheaper to keep deterministic across every node — and every
+          feature earns its place against that baseline. The full formal treatment —
+          state, transitions, gas and consensus — is specified in the ngchain yellow paper.
         </div>
       </section>
 
@@ -376,6 +421,11 @@ export default function App() {
       <section id="design" className="principles rule">
         <div className="eyebrow" data-rise style={{ marginBottom: "26px" }}><span className="no">05 —</span> the design rule</div>
         <h2 data-rise>The frontier of chain design — made usable.</h2>
+        <p className="lead" data-rise>
+          These are commitments, not footnotes. The mechanics beneath them — the
+          millisecond retarget, the GHOST uncle-reward curve, the gas model and the
+          determinism proof — are derived in full in the forthcoming yellow paper.
+        </p>
         <div className="pgrid" data-rise>
           {PRINCIPLES.map((p) => (
             <div className="pcard" data-hov key={p.n}><div className="pn">{p.n}</div><h3>{p.h}</h3><p>{p.p}</p></div>
@@ -438,7 +488,7 @@ export default function App() {
       <footer id="foot">
         <Mark className="foot-mark" accent />
         <div className="foot-big" data-rise>ng<em>·</em>chain</div>
-        <div className="kicker" data-rise style={{ marginTop: "18px", fontFamily: "var(--f-mono)", fontSize: "13px", letterSpacing: ".06em", color: "var(--mute)" }}>the next-generation blockchain — radically new, designed by subtraction</div>
+        <div className="kicker" data-rise style={{ marginTop: "18px", fontFamily: "var(--f-mono)", fontSize: "13px", letterSpacing: ".06em", color: "var(--mute)" }}>the next-generation blockchain — forged from first principles, specified in the yellow paper</div>
         <div className="foot-grid">
           <div className="foot-links">
             {FOOTER_LINKS.map(([l, h]) => <a href={h} {...ext()} data-hov key={l}>{l}</a>)}
