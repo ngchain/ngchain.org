@@ -22,39 +22,39 @@ type Entity = { tag: string; cmd: string; name: string; desc: string; chips: str
 const ENTITIES: Entity[] = [
   {
     tag: "ENTITY 01", cmd: "address", name: "Address",
-    desc: "The 32-byte hash of a public key — identity, balance and namespace in one. Addresses spend directly; nothing is ever registered.",
+    desc: "Your identity, your balance, your namespace — unified in a single sovereign key. No accounts to open, no registration, no gatekeepers. You simply are.",
     chips: ["identity", "balance", "namespace"],
   },
   {
     tag: "ENTITY 02", cmd: "contract", name: "Contract",
-    desc: "A compiled WebAssembly module opened under an address's namespace — versioned entirely on-chain, each revision stored as the minimal change from the last. Frozen and executed while active.",
-    chips: ["webassembly", "on-chain versioning", "sandboxed"],
+    desc: "Bring any language you already know, deploy it, and own it forever — a living program under your key, free to evolve for a lifetime without ever losing its history.",
+    chips: ["any language", "yours forever", "unstoppable"],
   },
 ];
 
 type Op = { no: string; name: string; desc: string };
 const OPS: Op[] = [
-  { no: "01", name: "generate", desc: "The mining reward — the only operation that mints new value." },
-  { no: "02", name: "transact", desc: "Pay an address and trigger its live contract, routed to the entry point named in the call." },
-  { no: "03", name: "commit", desc: "Publish a new revision of your module; only the minimal change is written on-chain. The first revision brings it online." },
-  { no: "04", name: "activate", desc: "Validate, freeze and power on the contract — its startup routine runs once." },
-  { no: "05", name: "deactivate", desc: "Power the contract down and reopen it for new revisions." },
-  { no: "06", name: "destroy", desc: "Remove the contract slot entirely." },
+  { no: "01", name: "generate", desc: "New value enters the world — the reward that secures the network." },
+  { no: "02", name: "transact", desc: "Move value and awaken code in a single, atomic motion." },
+  { no: "03", name: "commit", desc: "Ship a new version of your contract. Iterate, forever." },
+  { no: "04", name: "activate", desc: "Bring your contract to life — it runs the instant it goes live." },
+  { no: "05", name: "deactivate", desc: "Pause the machine and return to the drawing board." },
+  { no: "06", name: "destroy", desc: "Wipe the slate clean and reclaim your namespace." },
 ];
 
 type Sig = { name: string; role: string; size: string; w: number };
 const SIGS: Sig[] = [
-  { name: "secp256k1", role: "classical · ethereum parity", size: "67 B", w: 12 },
-  { name: "FN-DSA-512", role: "compact post-quantum", size: "700 B", w: 22 },
-  { name: "ML-DSA-44", role: "fips 204 · the finalized standard", size: "2.5 KB", w: 46 },
-  { name: "SLH-DSA-128s", role: "hash-based · assumption-minimal", size: "7.9 KB", w: 100 },
+  { name: "secp256k1", role: "battle-tested · full ethereum compatibility", size: "", w: 20 },
+  { name: "FN-DSA-512", role: "compact · quantum-secure", size: "", w: 45 },
+  { name: "ML-DSA-44", role: "the new global standard", size: "", w: 70 },
+  { name: "SLH-DSA-128s", role: "maximum assurance · zero assumptions", size: "", w: 100 },
 ];
 
 type Principle = { no: string; title: string; desc: string };
 const PRINCIPLES: Principle[] = [
-  { no: "01", title: "WebAssembly, not a bespoke VM", desc: "Any language that compiles to WebAssembly becomes a contract, on a decade-hardened sandbox. The frontier choice and the usable one at once." },
-  { no: "02", title: "Determinism as the hard rule", desc: "Every validator computes the same result and the same cost on every machine. It is the filter every performance idea must pass through." },
-  { no: "03", title: "Exact money, native speed", desc: "Balances are exact 256-bit integers, yet the hot path runs in native code — lifting a thousand-fold ceiling without touching the rules." },
+  { no: "01", title: "Future-proof", desc: "Secure today, secure in the quantum era — a chain engineered to outlast the very machines built to break it." },
+  { no: "02", title: "Sovereign", desc: "No accounts, no gatekeepers, no permission. Pure ownership, enforced by mathematics alone." },
+  { no: "03", title: "Effortless", desc: "The full power of a virtual machine with the simplicity of a single idea. Complexity, engineered away." },
 ];
 
 type Eco = { no: string; name: string; sd: string };
@@ -82,9 +82,14 @@ const FOOTER_LINKS: [string, string][] = [
 ];
 
 const MARQUEE = [
-  "next-generation blockchain", "proof-of-work", "post-quantum from genesis",
-  "webassembly core", "two entities / six operations", "exact 256-bit money",
-  "4-second blocks", "ghost uncles", "auditable / scalable / security-oriented",
+  "next-generation blockchain", "sovereign by design", "quantum-secure",
+  "own your keys", "own your code", "unstoppable by default",
+  "the frontier, made usable", "built to outlast the quantum era",
+];
+const MARQUEE2 = [
+  "two ideas", "six moves", "one settlement layer",
+  "no accounts", "no gatekeepers", "no permission",
+  "pure ownership", "enforced by mathematics", "the next generation of value",
 ];
 
 const BOOT = [
@@ -180,27 +185,42 @@ export default function App() {
       cleanups.push(() => clearTimeout(fs));
     }
 
-    // ---- scramble headline (decrypt) ----
+    // ---- scramble / decode ----
+    const GLY = "ABCDEFGHJKLMNPQRSTUVWXYZ0123456789/#%&<>*=+";
+    const scrambleEl = (el: HTMLElement, final: string, start = 4) => {
+      if (reduce) { el.textContent = final; return; }
+      let frame = 0;
+      const tick = () => {
+        let out = "", done = true;
+        for (let i = 0; i < final.length; i++) {
+          if (frame >= start + i * 2) out += final[i];
+          else if (final[i] === " ") out += " ";
+          else { out += GLY[(Math.random() * GLY.length) | 0]; done = false; }
+        }
+        el.textContent = out; frame++;
+        if (!done) requestAnimationFrame(tick); else el.textContent = final;
+      };
+      requestAnimationFrame(tick);
+    };
     function scramble() {
       document.querySelectorAll<HTMLElement>("[data-scramble]").forEach((el, idx) => {
-        const final = el.dataset.scramble || "";
-        const g = "ABCDEFGHJKLMNPQRSTUVWXYZ0123456789/#%&<>*=+";
-        let frame = 0;
-        const start = 4 + idx * 8;
-        if (reduce) { el.textContent = final; return; }
-        const tick = () => {
-          let out = "", done = true;
-          for (let i = 0; i < final.length; i++) {
-            if (frame >= start + i * 2) out += final[i];
-            else if (final[i] === " ") out += " ";
-            else { out += g[(Math.random() * g.length) | 0]; done = false; }
-          }
-          el.textContent = out; frame++;
-          if (!done) requestAnimationFrame(tick); else el.textContent = final;
-        };
-        requestAnimationFrame(tick);
+        scrambleEl(el, el.dataset.scramble || "", 4 + idx * 8);
       });
     }
+    // decode section labels + lime headings as they scroll into view
+    const dio = new IntersectionObserver((es) => {
+      es.forEach((x) => {
+        if (!x.isIntersecting) return;
+        dio.unobserve(x.target);
+        const el = x.target as HTMLElement;
+        scrambleEl(el, el.dataset.decode || "", 2);
+      });
+    }, { threshold: 0.6 });
+    document.querySelectorAll<HTMLElement>(".eyebrow,.h2 .lime").forEach((el) => {
+      el.dataset.decode = el.textContent || "";
+      dio.observe(el);
+    });
+    cleanups.push(() => dio.disconnect());
 
     // ---- scroll rail + nav ----
     const rail = document.querySelector<HTMLElement>(".rail i");
@@ -354,16 +374,15 @@ export default function App() {
         <canvas id="rain" ref={rainRef} aria-hidden="true" />
         <div className="hero-in">
           <div className="term-bar" data-reveal><span className="ok" />~/ngchain — main · node online</div>
-          <div className="eyebrow" data-reveal>// proof-of-work · webassembly · post-quantum</div>
+          <div className="eyebrow" data-reveal>// sovereign · quantum-secure · unstoppable</div>
           <h1 data-reveal>
             <span data-scramble="NEXT-GENERATION">NEXT-GENERATION</span>
             <br /><span className="lime" data-glitch data-scramble="BLOCKCHAIN">BLOCKCHAIN</span><span className="cur big">_</span>
           </h1>
           <p className="sub" data-reveal>
-            A ground-up reconstruction of proof-of-work — <b>auditable</b>, <b>scalable</b>,{" "}
-            <b>security-oriented</b> and <b>post-quantum</b> from genesis. An entire settlement layer
-            distilled to <b>two entities</b> and <b>six operations</b>, on a <b>WebAssembly</b> core that
-            runs any language and settles exact 256-bit value at native speed.
+            The blockchain, re-engineered for the decades ahead — <b>sovereign</b> by design,{" "}
+            <b>quantum-secure</b> to its core, and <b>radically simple</b> where every other chain grew
+            complex. The foundation the next generation of value will be built on.
           </p>
           <div className="cta-row" data-reveal>
             <a className="btn btn-primary" href="https://github.com/ngchain/ngcore" data-magnet {...ext}>[ explore the code ]</a>
@@ -404,7 +423,7 @@ export default function App() {
           <div className="sec-head">
             <div data-reveal><span className="eyebrow">01 // the protocol</span></div>
             <h2 className="h2" data-reveal>TWO ENTITIES.<br /><span className="lime">SIX OPERATIONS.</span></h2>
-            <p className="lead" data-reveal>The entire chain is a small formal system — a state of two nouns, moved by six verbs. Small enough to hold in your head, hard enough to misuse.</p>
+            <p className="lead" data-reveal>Where others pile on complexity, ngchain does the opposite. An entire network reduced to two ideas and six moves — an elegance you can hold in your head, and trust with everything you own.</p>
           </div>
 
           <div className="grid g-2 entities">
@@ -439,16 +458,15 @@ export default function App() {
           <div className="sec-head">
             <div data-reveal><span className="eyebrow">02 // signatures</span></div>
             <h2 className="h2" data-reveal>POST-QUANTUM,<br /><span className="lime">BY CHOICE.</span></h2>
-            <p className="lead" data-reveal>Keys derive from a 32-byte seed under a per-key scheme — classical efficiency or assumption-minimal post-quantum, chosen per key, never forced on the whole chain.</p>
+            <p className="lead" data-reveal>Choose your guarantee, key by key — from battle-tested classics to the strongest post-quantum standards on earth. Every wallet, ready for the quantum era from day one.</p>
           </div>
           <div className="sig-table">
-            <div className="sig-head"><span>scheme</span><span>class</span><span>envelope</span><span>size</span></div>
+            <div className="sig-head"><span>scheme</span><span>positioning</span><span>assurance</span></div>
             {SIGS.map((s) => (
               <div className="sig" style={{ ["--w" as string]: s.w + "%" }} key={s.name}>
                 <span className="nm">{s.name}</span>
                 <span className="rl">{s.role}</span>
                 <span className="bar"><i /></span>
-                <span className="sz">{s.size}</span>
               </div>
             ))}
           </div>
@@ -461,7 +479,7 @@ export default function App() {
           <div className="sec-head">
             <div data-reveal><span className="eyebrow">03 // the design rule</span></div>
             <h2 className="h2" data-reveal>BUILT FOR<br /><span className="lime">THE FRONTIER.</span></h2>
-            <p className="lead" data-reveal>Commitments, not footnotes — the mechanics beneath them, from the millisecond retarget to the uncle-reward curve, are derived in full in the forthcoming yellow paper.</p>
+            <p className="lead" data-reveal>Three promises the next generation refuses to compromise on — each one laid out in full in the forthcoming yellow paper.</p>
           </div>
           <div className="grid g-3">
             {PRINCIPLES.map((p) => (
@@ -482,7 +500,7 @@ export default function App() {
             <div className="sec-head">
               <div data-reveal><span className="eyebrow">04 // quick start</span></div>
               <h2 className="h2" data-reveal>RUN IT IN<br /><span className="lime">ONE COMMAND.</span></h2>
-              <p className="lead" data-reveal>Keys stay local; only signed transactions travel. A disposable local chain is one flag away, and any running chain can be forked for contract debugging.</p>
+              <p className="lead" data-reveal>From nothing to your own running chain in seconds — and your keys never leave your machine.</p>
             </div>
             <div className="win term" data-reveal>
               <div className="win-top"><span className="dots"><i /><i /><i /></span><span className="win-title">~/ngcore</span><span className="cp" id="copy">[ copy ]</span></div>
@@ -498,7 +516,7 @@ export default function App() {
           <div className="sec-head">
             <div data-reveal><span className="eyebrow">05 // the ecosystem</span></div>
             <h2 className="h2" data-reveal>A FULL-STACK<br /><span className="lime">NETWORK.</span></h2>
-            <p className="lead" data-reveal>Everything a layer-one needs, live on second-level domains — nothing it doesn't.</p>
+            <p className="lead" data-reveal>A complete universe around the protocol — explorer, wallet, faucet and more, live from day one.</p>
           </div>
           <div className="grid g-4">
             {ECO.map((e) => (
@@ -511,6 +529,17 @@ export default function App() {
           </div>
         </div>
       </section>
+
+      {/* MARQUEE — reverse */}
+      <div className="marquee rev" aria-hidden="true">
+        <div className="marquee-track">
+          {[0, 1].map((k) => (
+            <span className="mq-run" key={k}>
+              {MARQUEE2.map((m, i) => <span className="mq-item" key={i}><span className="mq-dot">◆</span>{m}</span>)}
+            </span>
+          ))}
+        </div>
+      </div>
 
       {/* FOOTER */}
       <footer>
