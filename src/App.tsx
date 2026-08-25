@@ -101,20 +101,20 @@ const BOOT = [
   "> node .............. [ ONLINE ]",
 ];
 
-const TERMINAL_HTML = `<span class="c"># build the node</span>
-<span class="p">$</span> go build -o ngcore ./cmd/ngcore
+const TERMINAL_HTML = `<span class="c"># install the node</span>
+<span class="p">$</span> go install github.com/ngchain/ngcore/cmd/ngcore@latest
 
-<span class="c"># spin up a disposable local chain</span>
-<span class="p">$</span> ./ngcore --zeronet --in-mem
+<span class="c"># join the public testnet</span>
+<span class="p">$</span> ngcore --testnet
 
-<span class="c"># a wallet — keys never leave the machine</span>
-<span class="p">$</span> ./ngcore cli key --new --scheme <span class="k">ml-dsa-44</span>
-<span class="p">$</span> ./ngcore cli send --to &lt;address&gt; --value 1.5 --fee 0.0001
+<span class="c"># create a wallet — keys never leave your machine</span>
+<span class="p">$</span> ngcore cli key --new --scheme <span class="k">ml-dsa-44</span>
 
-<span class="c"># the first revision deploys the contract</span>
-<span class="p">$</span> ./ngcore cli commit --file contract.wasm --fee 0.0001
-<span class="p">$</span> ./ngcore cli activate --fee 0.0001
-<span class="p">$</span> ./ngcore cli call --contract &lt;address&gt; --entry balance_of<span class="cur">_</span>`;
+<span class="c"># claim testnet coins → faucet.ngchain.org</span>
+<span class="p">$</span> ngcore cli send --to &lt;address&gt; --value 1.5 --fee 0.0001
+
+<span class="c"># you're on the network.</span>
+<span class="p">$</span> ngcore cli status<span class="cur">_</span>`;
 
 const ext = { target: "_blank" as const, rel: "noopener" as const };
 
@@ -373,7 +373,7 @@ export default function App() {
       <section className="hero" id="top">
         <canvas id="rain" ref={rainRef} aria-hidden="true" />
         <div className="hero-in">
-          <div className="term-bar" data-reveal><span className="ok" />~/ngchain — main · node online</div>
+          <div className="term-bar" data-reveal><span className="ok" />~/ngchain — testnet · live</div>
           <div className="eyebrow" data-reveal>// sovereign · quantum-secure · unstoppable</div>
           <h1 data-reveal>
             <span data-scramble="NEXT-GENERATION">NEXT-GENERATION</span>
@@ -385,8 +385,8 @@ export default function App() {
             complex. The foundation the next generation of value will be built on.
           </p>
           <div className="cta-row" data-reveal>
-            <a className="btn btn-primary" href="https://github.com/ngchain/ngcore" data-magnet {...ext}>[ explore the code ]</a>
-            <a className="btn btn-ghost" href="https://yellowpaper.ngchain.org" data-magnet {...ext}>[ yellow paper ]</a>
+            <a className="btn btn-primary" href="https://docs.ngchain.org" data-magnet {...ext}>[ join the testnet ]</a>
+            <a className="btn btn-ghost" href="https://faucet.ngchain.org" data-magnet {...ext}>[ get testnet tokens ]</a>
           </div>
         </div>
         <div className="scroll-cue"><span>scroll ↓</span></div>
@@ -498,9 +498,9 @@ export default function App() {
         <div className="wrap">
           <div className="startgrid">
             <div className="sec-head">
-              <div data-reveal><span className="eyebrow">04 // quick start</span></div>
-              <h2 className="h2" data-reveal>RUN IT IN<br /><span className="lime">ONE COMMAND.</span></h2>
-              <p className="lead" data-reveal>From nothing to your own running chain in seconds — and your keys never leave your machine.</p>
+              <div data-reveal><span className="eyebrow">04 // get started</span></div>
+              <h2 className="h2" data-reveal>JOIN THE<br /><span className="lime">TESTNET.</span></h2>
+              <p className="lead" data-reveal>Sync with the live network, claim your testnet coins, and send your first transaction — a few commands, and your keys never leave your machine.</p>
             </div>
             <div className="win term" data-reveal>
               <div className="win-top"><span className="dots"><i /><i /><i /></span><span className="win-title">~/ngcore</span><span className="cp" id="copy">[ copy ]</span></div>
@@ -546,11 +546,11 @@ export default function App() {
         <div className="wrap">
           <div className="foot-cta" data-reveal>
             <div className="eyebrow">// join the network</div>
-            <h2 className="h2">BUILD ON THE <span className="lime">NEXT GENERATION.</span></h2>
-            <p className="lead">Open source, post-quantum, and running today on the public testnet.</p>
+            <h2 className="h2">JOIN THE <span className="lime">NEXT GENERATION.</span></h2>
+            <p className="lead">Open source, post-quantum, and live today on the public testnet. Spin up a node and mine the next block.</p>
             <div className="cta-row">
-              <a className="btn btn-primary" href="https://github.com/ngchain/ngcore" data-magnet {...ext}>[ start building ]</a>
-              <a className="btn btn-ghost" href="https://docs.ngchain.org" data-magnet {...ext}>[ read the docs ]</a>
+              <a className="btn btn-primary" href="https://docs.ngchain.org" data-magnet {...ext}>[ join the testnet ]</a>
+              <a className="btn btn-ghost" href="https://explorer.ngchain.org" data-magnet {...ext}>[ block explorer ]</a>
             </div>
           </div>
           <div className="foot-grid">
