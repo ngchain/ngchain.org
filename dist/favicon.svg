@@ -1,10 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="88 16 464 608">
-  <style>
-    .ink { fill: #0d0d0c; }
-    @media (prefers-color-scheme: dark) { .ink { fill: #e9e7df; } }
-  </style>
-  <path class="ink" opacity=".72" d="M464,32l72,72H177" />
-  <path class="ink" opacity=".5" d="M104,32v360l72-72l1-216" />
-  <path fill="#ff3a1d" d="M464,32v504l72-72V104" />
-  <path class="ink" opacity=".85" d="M104,536l288,72l72-72l-288-72" />
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="88 16 464 608" fill="#c6ff3a">
+  <rect x="88" y="16" width="464" height="608" fill="#080809" />
+  <path fill-opacity="0.65" d="M464,32l72,72H177" />
+  <path fill-opacity="0.4" d="M104,32v360l72-72l1-216" />
+  <path d="M464,32v504l72-72V104" />
+  <path fill-opacity="0.65" d="M104,536l288,72l72-72l-288-72" />
 </svg>
